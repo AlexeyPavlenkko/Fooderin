@@ -9,4 +9,7 @@ import UIKit
 
 extension UIColor {
     static let main = UIColor(named: "main")!
+    static let background = UIColor(named: "background")!
+    static let cellBackground = UIColor(named: "cellBackground")!
+    static let shadow = UIColor(named: "shadow")!
 }
