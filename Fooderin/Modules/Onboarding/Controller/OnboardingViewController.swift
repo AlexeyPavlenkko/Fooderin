@@ -7,9 +7,8 @@
 
 import UIKit
 
-//MARK: - OnboardingViewController
 class OnboardingViewController: UIViewController {
-
+    
     //MARK: - Outlets & Subviews
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var nextButton: UIButton!
@@ -29,6 +28,7 @@ class OnboardingViewController: UIViewController {
         super.viewDidLoad()
         
         configureCollectionView()
+        configurePageControll()
         configureNextButton()
     }
     
@@ -54,7 +54,11 @@ class OnboardingViewController: UIViewController {
     }
     
     private func configureNextButton() {
-        nextButton.layer.cornerRadius = 10
+        nextButton.layer.cornerRadius = OnboardingConstants.cornerRadius
+    }
+    
+    private func configurePageControll() {
+        pageControl.numberOfPages = slides.count
     }
     
     private func updateNextButtonTitle() {
@@ -64,11 +68,7 @@ class OnboardingViewController: UIViewController {
             nextButton.setTitle("Next", for: .normal)
         }
     }
-    
-    private func slideToNextTitle() {
-        let indexPath = IndexPath(item: currentPage, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-    }
+
 }
 
 //MARK: - UICollectionViewDelegate & UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
