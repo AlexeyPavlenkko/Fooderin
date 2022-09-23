@@ -1,6 +1,7 @@
 ## Info
 - Stack: UIKit, Kingfisher, Networking, UserDefaults 
 - MVC
+- Desciption: Food Order App Prototype(Real-world simulation)
 
 ## App Showcase 
 
