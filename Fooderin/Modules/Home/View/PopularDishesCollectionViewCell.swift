@@ -47,7 +47,7 @@ class PopularDishesCollectionViewCell: UICollectionViewCell {
         lbl.font = .systemFont(ofSize: 14)
         lbl.textColor = .systemGray
         lbl.textAlignment = .left
-        lbl.numberOfLines = 0
+        lbl.numberOfLines = 3
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.setContentHuggingPriority(.required, for: .vertical)
         return lbl
@@ -116,6 +116,6 @@ class PopularDishesCollectionViewCell: UICollectionViewCell {
         titleLabel.text = dish.name
         caloriesLabel.text = dish.formattedCalories
         descriptionLabel.text = dish.description
-        popularDishImageView.kf.setImage(with: dish.image?.asUrl, placeholder: UIImage(systemName: "network"))
+        popularDishImageView.kf.setImage(with: dish.image?.asUrl)
     }
 }

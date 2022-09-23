@@ -27,7 +27,7 @@ class ChefsSpecialsCollectionViewCell: UICollectionViewCell {
         lbl.textAlignment = .left
         lbl.numberOfLines = 1
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        //lbl.setContentHuggingPriority(.required, for: .vertical)
+        lbl.setContentHuggingPriority(.required, for: .vertical)
         return lbl
     }()
     
@@ -38,7 +38,7 @@ class ChefsSpecialsCollectionViewCell: UICollectionViewCell {
         lbl.textColor = .main
         lbl.numberOfLines = 1
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        //lbl.setContentHuggingPriority(.required, for: .vertical)
+        lbl.setContentHuggingPriority(.required, for: .vertical)
         return lbl
     }()
     
@@ -47,7 +47,7 @@ class ChefsSpecialsCollectionViewCell: UICollectionViewCell {
         lbl.font = .systemFont(ofSize: 12)
         lbl.textColor = .systemGray
         lbl.textAlignment = .left
-        lbl.numberOfLines = 0
+        lbl.numberOfLines = 2
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -56,7 +56,7 @@ class ChefsSpecialsCollectionViewCell: UICollectionViewCell {
         let stack = UIStackView()
         stack.spacing = 5
         stack.axis = .vertical
-        stack.distribution = .fillEqually
+        stack.distribution = .fill
         stack.contentMode = .scaleToFill
         stack.alignment = .fill
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -112,9 +112,9 @@ class ChefsSpecialsCollectionViewCell: UICollectionViewCell {
             chefsSpecialImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             
             stackView.leadingAnchor.constraint(equalTo: chefsSpecialImageView.trailingAnchor, constant: 10),
-            stackView.topAnchor.constraint(equalTo: chefsSpecialImageView.topAnchor, constant: 10),
+            stackView.topAnchor.constraint(equalTo: chefsSpecialImageView.topAnchor, constant: 0),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            stackView.bottomAnchor.constraint(equalTo: chefsSpecialImageView.bottomAnchor, constant: -10)
+            stackView.bottomAnchor.constraint(equalTo: chefsSpecialImageView.bottomAnchor, constant: 0)
         ])
     }
     
@@ -123,6 +123,6 @@ class ChefsSpecialsCollectionViewCell: UICollectionViewCell {
         titleLabel.text = chefsSpecial.name
         caloriesLabel.text = chefsSpecial.formattedCalories
         descriptionLabel.text = chefsSpecial.description
-        chefsSpecialImageView.kf.setImage(with: chefsSpecial.image?.asUrl, placeholder: UIImage(systemName: "network"))
+        chefsSpecialImageView.kf.setImage(with: chefsSpecial.image?.asUrl)
     }
 }

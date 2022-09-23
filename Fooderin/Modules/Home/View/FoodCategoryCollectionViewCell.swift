@@ -93,6 +93,6 @@ class FoodCategoryCollectionViewCell: UICollectionViewCell {
     //MARK: - Public Methods
     public func setupCellWith(category: FoodCategory) {
         titleLabel.text = category.name
-        foodCategoryImageView.kf.setImage(with: category.image?.asUrl, placeholder: UIImage(systemName: "network"))
+        foodCategoryImageView.kf.setImage(with: category.image?.asUrl)
     }
 }
