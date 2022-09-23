@@ -35,6 +35,7 @@ class OnboardingViewController: UIViewController {
     //MARK: - Actions & @objc
     @IBAction private func nextButtonTapped(_ sender: UIButton) {
         if currentPage == slides.count - 1 {
+            UserDefaults.standard.set(true, forKey: UserDefaults.Keys.onboardingScreenWasShown)
             let homeController = HomeViewController.instantiate()
             let navVC = UINavigationController(rootViewController: homeController)
             navVC.modalTransitionStyle = .flipHorizontal
@@ -68,7 +69,6 @@ class OnboardingViewController: UIViewController {
             nextButton.setTitle("Next", for: .normal)
         }
     }
-
 }
 
 //MARK: - UICollectionViewDelegate & UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
@@ -95,4 +95,16 @@ extension OnboardingViewController: UICollectionViewDelegate, UICollectionViewDa
         let width = scrollView.frame.width
         currentPage = Int(scrollView.contentOffset.x / width)
     }
+}
+
+extension OnboardingViewController: Storyboarded {
+    static var storyboardName: String {
+        "Main"
+    }
+    
+    static var identifier: String {
+        "OnboardingViewController"
+    }
+    
+    
 }
