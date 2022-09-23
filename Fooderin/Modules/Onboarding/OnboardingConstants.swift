@@ -13,7 +13,6 @@ struct OnboardingConstants {
         OnboardingSlide(title: "World-Class Chefs", description: "Our dishes are prepaired only by the best", imageName: "chef"),
         OnboardingSlide(title: "Instant World-Wide Delivery", description: "Your orders will be delivered instantly irrespective of your location around the world", imageName: "delivery")
     ]
-    
     static let cornerRadius: CGFloat = 10
     private init() { }
 }
