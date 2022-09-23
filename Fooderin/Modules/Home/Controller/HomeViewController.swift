@@ -19,28 +19,9 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     //MARK: - Variables
-    private var foodCategories: [FoodCategory] = [
-        .init(id: "1", name: "Test1 Dishes", image: "https://picsum.photos/200/200"),
-        .init(id: "2", name: "Test2 Dishes", image: "https://picsum.photos/200/200"),
-        .init(id: "3", name: "Test3 Dishes", image: "https://picsum.photos/200/200"),
-        .init(id: "4", name: "Test4 Dishes", image: "https://picsum.photos/200/200"),
-        .init(id: "6", name: "Test6 Dishes", image: "https://picsum.photos/200/200"),
-        .init(id: "5", name: "Test5 Dishes", image: "https://picsum.photos/200/200"),
-    ]
-    
-    private var popularDishes: [Dish] = [
-        .init(id: "1", name: "Test1 Dishes", description: "BDSFlahbalblah", image: "https://picsum.photos/200/400", calories: 10),
-        .init(id: "2", name: "Test2 Dishes", description: "blahbalblah", image: "https://picsum.photos/200/400", calories: 10),
-        .init(id: "3", name: "Test3 Dishes", description: "blahbalblah", image: "https://picsum.photos/200/400", calories: 10),
-        .init(id: "4", name: "Test4 Dishes", description: "blahbalblah", image: "https://picsum.photos/200/400", calories: 10),
-        .init(id: "6", name: "Test6 Dishes", description: "blahbalblah", image: "https://picsum.photos/200/400", calories: 10),
-        .init(id: "5", name: "Test5 Dishes", description: "blahbalblah", image: "https://picsum.photos/200/400", calories: 10),
-    ]
-    
-    private var chefsSpecials: [Dish] = [
-        .init(id: "6", name: "Test6 Dishes", description: "blahbalblah", image: "https://picsum.photos/100/100", calories: 10),
-        .init(id: "5", name: "Test5 Dishes", description: "blahbalblah", image: "https://picsum.photos/100/100", calories: 10)
-    ]
+    private var foodCategories: [FoodCategory] = []
+    private var popularDishes: [Dish] = []
+    private var chefsSpecials: [Dish] = []
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -48,11 +29,13 @@ class HomeViewController: UIViewController {
         
         confugireNavBar()
         configureCollectionView()
+        sendNetworkRequest()
     }
     
     //MARK: - Actions & @objc
     @objc private func cartBarButtonDidTapped() {
-        print("Cart was tapped")
+        let listOfOrdersController = ListOfOrdersViewController.instantiate() as! ListOfOrdersViewController
+        navigationController?.pushViewController(listOfOrdersController, animated: true)
     }
     
     //MARK: - Methods
@@ -64,6 +47,8 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.layoutIfNeeded()
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20, weight: .semibold)]
+        navigationController?.navigationBar.tintColor = .main
+        navigationItem.backButtonTitle = " "
     }
 
     private func configureCollectionView() {
@@ -74,6 +59,28 @@ class HomeViewController: UIViewController {
         collectionView.collectionViewLayout = HomeCompositionalLayout.createLayout(with: Section.allCases)
         collectionView.dataSource = self
         collectionView.delegate = self
+    }
+    
+    private func sendNetworkRequest() {
+        ProgressIndication.show(on: self)
+        let categoriesRequest = FoodCategoriesRequest()
+        NetworkService.shared.send(request: categoriesRequest) { [weak self] result in
+            switch result {
+            case .success(let listOf):
+                self?.foodCategories = listOf.categories
+                self?.popularDishes  = listOf.populars
+                self?.chefsSpecials  = listOf.specials
+                DispatchQueue.main.async {
+                    self?.collectionView.reloadData()
+                    ProgressIndication.remove()
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    ProgressIndication.remove()
+                    self?.showErrorAlert(with: error.localizedDescription, completionAction: nil)
+                }
+            }
+        }
     }
 }
 
@@ -121,7 +128,21 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        print("Did tapped at index path: \(indexPath)")
+        let section = Section.allCases[indexPath.section]
+        switch section {
+        case .foodCategory:
+            guard let controller = ListOfDishesViewController.instantiate() as? ListOfDishesViewController else {return}
+            controller.category = foodCategories[indexPath.row]
+            navigationController?.pushViewController(controller, animated: true)
+        case .popularDishes:
+            guard let controller = DishDetailViewController.instantiate() as? DishDetailViewController else {return}
+            controller.dish = popularDishes[indexPath.row]
+            navigationController?.pushViewController(controller, animated: true)
+        case .chefsSpecial:
+            guard let controller = DishDetailViewController.instantiate() as? DishDetailViewController else {return}
+            controller.dish = chefsSpecials[indexPath.row]
+            navigationController?.pushViewController(controller, animated: true)
+        }
     }
 
 }
