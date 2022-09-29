@@ -7,6 +7,13 @@
 
 import Foundation
 
+//MARK: - APIResponse
+fileprivate struct APIResponse<T: Decodable>: Decodable {
+    let status: Int
+    let message: String?
+    let data: T
+}
+
 protocol APIRequest {
     associatedtype Response: Decodable
     
@@ -44,5 +51,10 @@ extension APIRequest {
         }
         
         return request1
+    }
+    
+    func decode(from data: Data) throws -> Response {
+        let decodedApiResponse = try JSONDecoder().decode(APIResponse<Response>.self, from: data)
+        return decodedApiResponse.data
     }
 }
